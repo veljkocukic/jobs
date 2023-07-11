@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { Job } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { checkIfExistsAndReturn } from 'src/utils/helpers';
@@ -74,6 +75,8 @@ export class JobOfferService {
       });
 
       return { msg: 'Offer accepted' };
-    } catch (error) {}
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

@@ -40,8 +40,8 @@ export class JobOfferController {
 
   @Post('accept/:jobOfferId')
   acceptJobOffer(
-    @GetUser('id', ParseIntPipe) userId: number,
-    @Query('jobId', ParseIntPipe) jobOfferId: number,
+    @GetUser('id') userId: number,
+    @Param('jobOfferId', ParseIntPipe) jobOfferId: number,
   ) {
     return this.jobOfferService.acceptJobOffer(jobOfferId, userId);
   }
