@@ -38,16 +38,6 @@ export class CreateJobDto {
   @IsString()
   location: string;
 
-  @IsNotEmpty()
-  @IsEnum(JobStatus)
-  status: JobStatus;
-
   @IsBoolean()
   withoutMonitoring: boolean;
-
-  @IsBoolean()
-  hasAcceptedOffer: boolean;
-
-  @IsInt()
-  acceptedOfferId: number;
 }

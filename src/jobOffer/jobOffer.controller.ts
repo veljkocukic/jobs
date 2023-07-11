@@ -19,22 +19,22 @@ import { CreateJobOfferDto } from './dto';
 export class JobOfferController {
   constructor(private jobOfferService: JobOfferService) {}
 
-  @Get(':id')
-  getSingleJobOffer(@Query('jobId', ParseIntPipe) jobOfferId: number) {
+  @Get(':jobId')
+  getSingleJobOffer(@Param('jobId', ParseIntPipe) jobOfferId: number) {
     return this.jobOfferService.getSingleJobOffer(jobOfferId);
   }
 
-  @Post()
-  createJob(
+  @Post(':jobId')
+  createJobOffer(
     @GetUser('id', ParseIntPipe) userId: number,
-    @Query('jobId', ParseIntPipe) jobId: number,
+    @Param('jobId', ParseIntPipe) jobId: number,
     @Body() dto: CreateJobOfferDto,
   ) {
     return this.jobOfferService.createJobOffer(userId, jobId, dto);
   }
 
   @Delete(':id')
-  deleteUser(@Param('id', ParseIntPipe) jobOfferId: number) {
+  deleteJobOffer(@Param('id', ParseIntPipe) jobOfferId: number) {
     return this.jobOfferService.deleteJobOffer(jobOfferId);
   }
 

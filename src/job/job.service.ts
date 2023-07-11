@@ -24,7 +24,10 @@ export class JobService {
     });
     const jobOffers = await this.prisma.jobOffer.findMany({
       where: { jobId: jobId },
-      select: { price: true, user: true },
+      select: {
+        price: true,
+        user: { select: { name: true, lastName: true, jobsDone: true } },
+      },
     });
 
     return checkIfExistsAndReturn({ ...job, jobOffers }, 'Job not found');

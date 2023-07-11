@@ -13,26 +13,37 @@ export class AuthService {
     private config: ConfigService,
   ) {}
   async register(dto: RegisterDto) {
-    const hash = await argon.hash(dto.password);
-    const user = await this.prisma.user.create({
-      data: { ...dto, password: hash },
-    });
-    delete user.password;
-    return user;
+    try {
+      const hash = await argon.hash(dto.password);
+      const user = await this.prisma.user.create({
+        data: { ...dto, password: hash },
+      });
+      delete user.password;
+      return user;
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ForbiddenException('Data already in use');
+      }
+      return error;
+    }
   }
   async login(dto: LoginDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: dto.email,
-      },
-    });
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          email: dto.email,
+        },
+      });
 
-    if (!user) throw new ForbiddenException('Credentials incorrect');
+      if (!user) throw new ForbiddenException('Credentials incorrect');
 
-    const pwMatches = await argon.verify(user.password, dto.password);
+      const pwMatches = await argon.verify(user.password, dto.password);
 
-    if (!pwMatches) throw new ForbiddenException('Credentials incorrect');
-    return this.signToken(user.id, user.email);
+      if (!pwMatches) throw new ForbiddenException('Credentials incorrect');
+      return this.signToken(user.id, user.email);
+    } catch (error) {
+      return error;
+    }
   }
   async signToken(
     userId: number,
