@@ -26,7 +26,7 @@ export class UserController {
   }
 
   @Get(':id')
-  getSingleJob(@Param('id', ParseIntPipe) userId: number) {
+  getSingleUser(@Param('id', ParseIntPipe) userId: number) {
     return this.userService.getSingleUser(userId);
   }
 

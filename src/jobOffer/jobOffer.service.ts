@@ -1,8 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
-import { Job } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { checkIfExistsAndReturn } from 'src/utils/helpers';
 import { CreateJobOfferDto } from './dto/jobOffer.dto';
 
 @Injectable()
