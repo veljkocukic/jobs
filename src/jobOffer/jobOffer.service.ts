@@ -67,7 +67,7 @@ export class JobOfferService {
       await this.prisma.user.update({
         where: { id: jobOffer.userId },
         data: {
-          currentlyWorkingOnJobId: jobOffer.userId,
+          currentlyWorkingOnJobId: jobOffer.jobId,
         },
       });
 
