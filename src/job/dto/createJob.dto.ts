@@ -1,18 +1,21 @@
-import { JobType, Currency, PriceType, JobStatus } from '@prisma/client';
+import { JobType, Currency, PriceType } from '@prisma/client';
 import {
   IsBoolean,
   IsDateString,
   IsEnum,
-  IsInt,
   IsNotEmpty,
   IsNumber,
   IsString,
 } from 'class-validator';
 
 export class CreateJobDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
   @IsEnum(JobType)
   @IsNotEmpty()
-  type: JobType;
+  category: JobType;
 
   @IsDateString()
   @IsNotEmpty()
@@ -25,6 +28,9 @@ export class CreateJobDto {
   @IsEnum(Currency)
   @IsNotEmpty()
   currency: Currency;
+
+  @IsNumber()
+  amount: number;
 
   @IsNotEmpty()
   @IsEnum(PriceType)

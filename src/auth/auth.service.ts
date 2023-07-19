@@ -19,7 +19,8 @@ export class AuthService {
         data: { ...dto, password: hash },
       });
       delete user.password;
-      return user;
+      const token = await this.signToken(user.id, user.email);
+      return token;
     } catch (error) {
       if (error.code === 'P2002') {
         throw new ForbiddenException('Data already in use');

@@ -38,13 +38,15 @@ enum Role {
 
 model Job {
   id Int @id @default(autoincrement())
+  name String
   description String
-  type JobType
+  category JobType
   createdAt DateTime @default(now())
   date DateTime
   price Float 
   priceType PriceType @default(WHOLE)
   currency Currency @default(RSD)
+  amount Float
   location String
   status JobStatus @default(ACTIVE)
   withoutMonitoring Boolean @default(false)
@@ -101,7 +103,6 @@ enum PriceType{
   PER_HOUR
   PER_M2
   PER_DAY
-  PER_ROOM
 }
 
 

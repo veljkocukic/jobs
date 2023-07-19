@@ -8,7 +8,7 @@ CREATE TYPE "Currency" AS ENUM ('RSD', 'EUR', 'USD', 'CHF');
 CREATE TYPE "JobStatus" AS ENUM ('ACTIVE', 'IN_PROGRESS', 'DONE', 'ABORTED');
 
 -- CreateEnum
-CREATE TYPE "PriceType" AS ENUM ('WHOLE', 'PER_HOUR', 'PER_M2', 'PER_DAY', 'PER_ROOM');
+CREATE TYPE "PriceType" AS ENUM ('WHOLE', 'PER_HOUR', 'PER_M2', 'PER_DAY');
 
 -- CreateEnum
 CREATE TYPE "JobType" AS ENUM ('ELECTRICS', 'PLUMBING', 'PAINTING', 'GARDENING', 'CLEANING');
@@ -32,13 +32,15 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "jobs" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "type" "JobType" NOT NULL,
+    "category" "JobType" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "date" TIMESTAMP(3) NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "priceType" "PriceType" NOT NULL DEFAULT 'WHOLE',
     "currency" "Currency" NOT NULL DEFAULT 'RSD',
+    "amount" DOUBLE PRECISION NOT NULL,
     "location" TEXT NOT NULL,
     "status" "JobStatus" NOT NULL DEFAULT 'ACTIVE',
     "withoutMonitoring" BOOLEAN NOT NULL DEFAULT false,
