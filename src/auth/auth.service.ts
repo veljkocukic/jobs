@@ -20,7 +20,7 @@ export class AuthService {
       });
       delete user.password;
       const token = await this.signToken(user.id, user.email);
-      return token;
+      return { ...token, user };
     } catch (error) {
       if (error.code === 'P2002') {
         throw new ForbiddenException('Data already in use');
@@ -41,7 +41,9 @@ export class AuthService {
       const pwMatches = await argon.verify(user.password, dto.password);
 
       if (!pwMatches) throw new ForbiddenException('Credentials incorrect');
-      return this.signToken(user.id, user.email);
+      delete user.password;
+      const token = await this.signToken(user.id, user.email);
+      return { ...token, user };
     } catch (error) {
       return error;
     }
