@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Job } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { checkIfExistsAndReturn } from 'src/utils/helpers';
+import { ITableJob } from 'src/utils/interfaces';
 import { CreateJobDto } from './dto/createJob.dto';
 
 @Injectable()
@@ -37,7 +38,7 @@ export class JobService {
     page: number,
     limit: number,
     userId: number,
-  ): Promise<{ data: Job[]; count: number; pageCount: number }> {
+  ): Promise<{ data: ITableJob[]; count: number; pageCount: number }> {
     const skip = (page - 1) * limit;
 
     const jobs = await this.prisma.job.findMany({
@@ -45,6 +46,12 @@ export class JobService {
       take: limit,
       where: {
         userId,
+      },
+      select: {
+        name: true,
+        status: true,
+        date: true,
+        id: true,
       },
     });
 
