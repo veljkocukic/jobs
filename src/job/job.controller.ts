@@ -20,6 +20,15 @@ import { JobService } from './job.service';
 export class JobController {
   constructor(private jobService: JobService) {}
 
+  @Get('worker-available-jobs')
+  getAvailableWorkerJobs(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+    @GetUser('id', ParseIntPipe) userId: number,
+  ) {
+    return this.jobService.getAvailableWorkerJobs(page, limit, userId);
+  }
+
   @Post()
   createJob(
     @GetUser('id', ParseIntPipe) userId: number,
@@ -54,14 +63,5 @@ export class JobController {
   @Delete(':id')
   deleteUser(@Param('id', ParseIntPipe) jobId: number) {
     return this.jobService.deleteJob(jobId);
-  }
-
-  @Get('worker-available-jobs')
-  getAvailableWorkerJobs(
-    @Query('page', ParseIntPipe) page = 1,
-    @Query('limit', ParseIntPipe) limit = 10,
-    @GetUser('id', ParseIntPipe) userId: number,
-  ) {
-    return this.jobService.getAvailableWorkerJobs(page, limit, userId);
   }
 }

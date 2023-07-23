@@ -5,11 +5,13 @@ import {
   HttpStatus,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GetUser } from './decorator';
 import { AddBioAndCatDto, RegisterDto } from './dto';
 import { LoginDto } from './dto/login.dto';
+import { JwtGuard } from './guard';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +28,7 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
+  @UseGuards(JwtGuard)
   @Post('update-bio')
   addBioAndCategories(
     @Body() dto: AddBioAndCatDto,
