@@ -19,10 +19,16 @@ model User{
   email String @unique
   phoneNumber String @unique
   createdAt DateTime @default(now())
+  bio String?
+  categories JobType[]
   updatedAt DateTime @updatedAt
   jobs Job[] @relation(name: "creator")
   jobOffers JobOffer[]
   jobsDone Job[] @relation("job_done")
+
+  ratings Rating[]
+  ratingGiven Rating[] @relation("ratings_given")
+
 
   currentlyWorkingOn Job? @relation(fields: [currentlyWorkingOnJobId], references: [id]) 
   currentlyWorkingOnJobId Int? @unique
@@ -84,6 +90,21 @@ model JobOffer{
   job   Job @relation(fields: [jobId], references: [id])
 }
 
+
+model Rating{
+  id Int @id @default(autoincrement())
+  description String
+  rating Float
+
+  userRatedId Int
+  userRated User @relation(fields: [userRatedId], references: [id])
+
+  ratingGiverId Int
+  ratingGiverUser User @relation(fields: [ratingGiverId], references: [id], name: "ratings_given")
+
+
+}
+
 enum Currency{
   RSD
   EUR
@@ -104,6 +125,7 @@ enum PriceType{
   PER_M2
   PER_DAY
 }
+
 
 
 

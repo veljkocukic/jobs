@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
+import { CompleteAndRateDTO } from './dto/completeAndRate.dto';
 import { CreateJobDto } from './dto/createJob.dto';
 import { JobService } from './job.service';
 
@@ -25,6 +26,15 @@ export class JobController {
     @Body() dto: CreateJobDto,
   ) {
     return this.jobService.createJob(userId, dto);
+  }
+
+  @Post()
+  completeJob(
+    @GetUser('id', ParseIntPipe) userId: number,
+    @Param('id', ParseIntPipe) jobId: number,
+    @Body() dto: CompleteAndRateDTO,
+  ) {
+    return this.jobService.completeAndRate(userId, jobId, dto);
   }
 
   @Get(':id')
@@ -44,5 +54,14 @@ export class JobController {
   @Delete(':id')
   deleteUser(@Param('id', ParseIntPipe) jobId: number) {
     return this.jobService.deleteJob(jobId);
+  }
+
+  @Get('worker-available-jobs')
+  getAvailableWorkerJobs(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+    @GetUser('id', ParseIntPipe) userId: number,
+  ) {
+    return this.jobService.getAvailableWorkerJobs(page, limit, userId);
   }
 }

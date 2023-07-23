@@ -23,6 +23,8 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "bio" TEXT,
+    "categories" "JobType"[],
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "currentlyWorkingOnJobId" INTEGER,
 
@@ -65,6 +67,17 @@ CREATE TABLE "JobOffer" (
     CONSTRAINT "JobOffer_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Rating" (
+    "id" SERIAL NOT NULL,
+    "description" TEXT NOT NULL,
+    "rating" DOUBLE PRECISION NOT NULL,
+    "userRatedId" INTEGER NOT NULL,
+    "ratingGiverId" INTEGER NOT NULL,
+
+    CONSTRAINT "Rating_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -88,3 +101,9 @@ ALTER TABLE "JobOffer" ADD CONSTRAINT "JobOffer_userId_fkey" FOREIGN KEY ("userI
 
 -- AddForeignKey
 ALTER TABLE "JobOffer" ADD CONSTRAINT "JobOffer_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "jobs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Rating" ADD CONSTRAINT "Rating_userRatedId_fkey" FOREIGN KEY ("userRatedId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Rating" ADD CONSTRAINT "Rating_ratingGiverId_fkey" FOREIGN KEY ("ratingGiverId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

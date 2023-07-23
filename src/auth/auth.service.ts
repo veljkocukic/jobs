@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { LoginDto, RegisterDto } from './dto';
+import { AddBioAndCatDto, LoginDto, RegisterDto } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -65,5 +65,16 @@ export class AuthService {
     return {
       access_token: token,
     };
+  }
+
+  async addBioAndCategories(userId: number, dto: AddBioAndCatDto) {
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        bio: dto.bio,
+        categories: dto.categories,
+      },
+    });
+    return user;
   }
 }
