@@ -61,6 +61,7 @@ CREATE TABLE "JobOffer" (
     "price" DOUBLE PRECISION NOT NULL,
     "priceType" "PriceType" NOT NULL DEFAULT 'WHOLE',
     "currency" "Currency" NOT NULL DEFAULT 'RSD',
+    "amount" DOUBLE PRECISION,
     "userId" INTEGER NOT NULL,
     "jobId" INTEGER NOT NULL,
 

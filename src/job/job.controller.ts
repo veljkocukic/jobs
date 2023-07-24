@@ -37,7 +37,7 @@ export class JobController {
     return this.jobService.createJob(userId, dto);
   }
 
-  @Post()
+  @Post('rate-and-complete/:id')
   completeJob(
     @GetUser('id', ParseIntPipe) userId: number,
     @Param('id', ParseIntPipe) jobId: number,

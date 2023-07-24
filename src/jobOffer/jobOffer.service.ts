@@ -34,7 +34,23 @@ export class JobOfferService {
       const jobOffer = await this.prisma.jobOffer.findUnique({
         where: { id: jobOfferId },
       });
-      return jobOffer;
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: jobOffer.userId,
+        },
+        select: {
+          ratings: true,
+          jobsDone: true,
+          name: true,
+          lastName: true,
+        },
+      });
+
+      const ratings =
+        user.ratings.reduce((a, b) => a + b.rating, 0) / user.ratings.length;
+      const jobsDone = user.jobsDone.length;
+
+      return { ...jobOffer, user: { ...user, ratings, jobsDone } };
     } catch (error) {
       return error;
     }

@@ -6,7 +6,6 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
