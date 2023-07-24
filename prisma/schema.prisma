@@ -82,6 +82,7 @@ model JobOffer{
   price Float 
   priceType PriceType @default(WHOLE)
   currency Currency @default(RSD)
+  amount Float?
 
   userId Int
   user   User @relation(fields: [userId], references: [id])

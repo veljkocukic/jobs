@@ -17,4 +17,8 @@ export class CreateJobOfferDto {
   @IsNotEmpty()
   @IsString()
   description: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  amount?: number;
 }
