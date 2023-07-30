@@ -22,9 +22,59 @@ export class UserService {
       where: {
         id: userId,
       },
+      select: {
+        name: true,
+        lastName: true,
+        categories: true,
+        bio: true,
+        email: true,
+        phoneNumber: true,
+        id: true,
+        ratings: {
+          take: 2,
+          select: {
+            description: true,
+            rating: true,
+            ratingGiverUser: {
+              select: {
+                name: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+        role: true,
+        jobsDone: {
+          take: 2,
+        },
+        jobs: {
+          take: 2,
+          select: {
+            id: true,
+            name: true,
+            location: true,
+            date: true,
+            category: true,
+          },
+        },
+      },
     });
 
-    return checkIfExistsAndReturn(user, 'User not found');
+    const totalRatings =
+      user.ratings.reduce((a, b) => a + b.rating, 0) / user.ratings.length;
+
+    const totalJobsPosted = user.jobs.length;
+    const totalJobsDone = user.jobsDone.length;
+
+    const resp = {
+      ...user,
+      totalRatings,
+      jobsDone: user.jobsDone.length,
+      totalJobsPosted,
+      totalJobsDone,
+    };
+
+    return checkIfExistsAndReturn(user, 'User not found', resp);
   }
 
   async getAllUsers(

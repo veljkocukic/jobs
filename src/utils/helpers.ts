@@ -1,8 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
 
-export const checkIfExistsAndReturn = (model, message) => {
+export const checkIfExistsAndReturn = (
+  model: any,
+  message: string,
+  actual?: any,
+) => {
   if (model) {
-    return model;
+    return actual ?? model;
   } else {
     throw new NotFoundException(message);
   }

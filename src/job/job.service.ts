@@ -69,6 +69,7 @@ export class JobService {
         name: true,
         status: true,
         date: true,
+        category: true,
         id: true,
       },
     });
@@ -151,12 +152,17 @@ export class JobService {
         price: true,
         priceType: true,
         currency: true,
+        category: true,
         amount: true,
         id: true,
+      },
+      where: {
+        status: 'ACTIVE',
       },
     };
     if (user.categories.length > 0) {
       jobsQuery.where = {
+        ...jobsQuery.where,
         category: {
           in: user.categories,
         },
