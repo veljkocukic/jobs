@@ -17,6 +17,27 @@ export class UserService {
     return user;
   }
 
+  async getUserRatings(page: number, limit: number, userId: number) {
+    const skip = (page - 1) * limit;
+
+    const ratings = await this.prisma.rating.findMany({
+      where: { userRatedId: userId },
+      skip,
+      take: limit,
+      select: {
+        description: true,
+        rating: true,
+        ratingGiverUser: { select: { name: true, lastName: true } },
+      },
+    });
+
+    const count = await this.prisma.rating.count({
+      where: { userRatedId: userId },
+    });
+    const pageCount = count / limit;
+    return { data: ratings, count, pageCount };
+  }
+
   async getSingleUser(userId: number) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -46,6 +67,16 @@ export class UserService {
         role: true,
         jobsDone: {
           take: 2,
+          select: {
+            name: true,
+            id: true,
+            category: true,
+            location: true,
+            date: true,
+            description: true,
+            price: true,
+            priceType: true,
+          },
         },
         jobs: {
           take: 2,
@@ -69,7 +100,6 @@ export class UserService {
     const resp = {
       ...user,
       totalRatings,
-      jobsDone: user.jobsDone.length,
       totalJobsPosted,
       totalJobsDone,
     };

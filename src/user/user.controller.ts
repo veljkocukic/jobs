@@ -50,4 +50,13 @@ export class UserController {
   deleteUser(@Param('id', ParseIntPipe) userId: number) {
     return this.userService.deleteUser(userId);
   }
+
+  @Get('ratings/:id')
+  getUserRatings(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+    @GetUser('id', ParseIntPipe) userId: number,
+  ) {
+    return this.userService.getUserRatings(page, limit, userId);
+  }
 }

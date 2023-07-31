@@ -104,6 +104,8 @@ model Rating{
   ratingGiverId Int
   ratingGiverUser User @relation(fields: [ratingGiverId], references: [id], name: "ratings_given")
 
+  createdAt DateTime @default(now())
+
 
 }
 
