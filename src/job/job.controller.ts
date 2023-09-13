@@ -14,7 +14,9 @@ import { JwtGuard } from 'src/auth/guard';
 import { CompleteAndRateDTO } from './dto/completeAndRate.dto';
 import { CreateJobDto } from './dto/createJob.dto';
 import { JobService } from './job.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Job')
 @UseGuards(JwtGuard)
 @Controller('jobs')
 export class JobController {

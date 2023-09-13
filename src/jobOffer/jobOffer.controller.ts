@@ -12,7 +12,9 @@ import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { JobOfferService } from './jobOffer.service';
 import { CreateJobOfferDto } from './dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Job Offer')
 @UseGuards(JwtGuard)
 @Controller('job-offer')
 export class JobOfferController {

@@ -12,7 +12,9 @@ import { GetUser } from './decorator';
 import { AddBioAndCatDto, RegisterDto } from './dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtGuard } from './guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
