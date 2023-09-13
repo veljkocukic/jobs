@@ -82,7 +82,11 @@ export class JobService {
       },
     });
 
-    const count = await this.prisma.user.count({});
+    const count = await this.prisma.job.count({
+      where: {
+        userId,
+      },
+    });
     const pageCount = count / limit;
     return { data: jobs, count, pageCount };
   }
