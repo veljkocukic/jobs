@@ -5,6 +5,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { JobModule } from './job/job.module';
 import { JobOfferModule } from './jobOffer/jobOffer.module';
+import { GatewayModule } from './gateway/gateway.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { JobOfferModule } from './jobOffer/jobOffer.module';
     PrismaModule,
     JobModule,
     JobOfferModule,
+    GatewayModule,
+    SocketModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [],

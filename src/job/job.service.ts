@@ -4,16 +4,24 @@ import { checkIfExistsAndReturn } from 'src/utils/helpers';
 import { ITableJob } from 'src/utils/interfaces';
 import { CompleteAndRateDTO } from './dto/completeAndRate.dto';
 import { CreateJobDto } from './dto/createJob.dto';
+import { SocketService } from 'src/socket/socket.service';
 
 @Injectable()
 export class JobService {
-  constructor(private prisma: PrismaService) {}
-
+  constructor(
+    private readonly gw: SocketService,
+    private prisma: PrismaService,
+  ) {}
   async createJob(userId: number, jobDto: CreateJobDto) {
     const job = await this.prisma.job.create({
       data: { ...jobDto, userId, date: new Date(jobDto.date).toISOString() },
     });
 
+    this.gw.socket.emit('job', {
+      category: job.category,
+      id: job.id,
+      type: 'job-created',
+    });
     return job;
   }
 
