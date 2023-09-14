@@ -53,7 +53,7 @@ model Job {
   price Float 
   priceType PriceType @default(WHOLE)
   currency Currency @default(RSD)
-  amount Float
+  amount Float?
   location String
   status JobStatus @default(ACTIVE)
   withoutMonitoring Boolean @default(false)

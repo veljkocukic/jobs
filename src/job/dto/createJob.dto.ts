@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
 } from 'class-validator';
 
@@ -52,7 +53,8 @@ export class CreateJobDto {
     type: Number,
   })
   @IsNumber()
-  amount: number;
+  @IsOptional()
+  amount?: number;
 
   @ApiProperty({
     type: String,
