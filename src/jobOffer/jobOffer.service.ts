@@ -96,6 +96,15 @@ export class JobOfferService {
         },
       });
 
+      await this.prisma.jobOffer.updateMany({
+        where: {
+          jobId: jobOffer.jobId,
+        },
+        data: {
+          expired: true,
+        },
+      });
+
       await this.prisma.user.update({
         where: { id: jobOffer.userId },
         data: {

@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Currency, PriceType } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateJobOfferDto {
   @ApiProperty({
@@ -38,7 +44,7 @@ export class CreateJobOfferDto {
   @ApiProperty({
     type: Number,
   })
-  @IsNotEmpty()
   @IsNumber()
+  @IsOptional()
   amount?: number;
 }

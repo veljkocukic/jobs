@@ -81,6 +81,7 @@ model JobOffer{
   id Int @id @default(autoincrement())
   description String
   price Float 
+  expired Boolean @default(false)
   priceType PriceType @default(WHOLE)
   currency Currency @default(RSD)
   amount Float?
