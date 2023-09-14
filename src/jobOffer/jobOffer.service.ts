@@ -1,10 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { SocketService } from 'src/socket/socket.service';
 import { CreateJobOfferDto } from './dto/jobOffer.dto';
 
 @Injectable()
 export class JobOfferService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private readonly gw: SocketService,
+    private prisma: PrismaService,
+  ) {}
 
   async createJobOffer(
     userId: number,
@@ -14,6 +18,18 @@ export class JobOfferService {
     try {
       const jobOffer = await this.prisma.jobOffer.create({
         data: { ...jobOfferDto, jobId, userId },
+      });
+
+      const job = await this.prisma.job.findFirst({
+        where: {
+          id: jobId,
+        },
+      });
+
+      this.gw.socket.emit('job', {
+        id: jobOffer.id,
+        type: 'offer-received',
+        receiverId: job.userId,
       });
       return jobOffer;
     } catch (error) {
@@ -87,6 +103,11 @@ export class JobOfferService {
         },
       });
 
+      this.gw.socket.emit('job', {
+        id: job.id,
+        type: 'offer-accepted',
+        receiverId: jobOffer.userId,
+      });
       return { msg: 'Offer accepted' };
     } catch (error) {
       throw new Error(error);
