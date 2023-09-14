@@ -22,6 +22,11 @@ import { ApiTags } from '@nestjs/swagger';
 export class JobController {
   constructor(private jobService: JobService) {}
 
+  @Get('overview')
+  getJobsOverview(@GetUser('id', ParseIntPipe) userId: number) {
+    return this.jobService.getJobOverview(userId);
+  }
+
   @Get('worker-available-jobs')
   getAvailableWorkerJobs(
     @Query('page', ParseIntPipe) page = 1,

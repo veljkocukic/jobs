@@ -145,6 +145,46 @@ export class JobService {
     }
   }
 
+  async getJobOverview(userId: number) {
+    try {
+      const allJobs = await this.prisma.job.count({
+        where: {
+          userId,
+        },
+      });
+
+      const completed = await this.prisma.job.count({
+        where: {
+          userId,
+          status: 'DONE',
+        },
+      });
+
+      const inProgress = await this.prisma.job.count({
+        where: {
+          userId,
+          status: 'IN_PROGRESS',
+        },
+      });
+
+      const waitingForWorker = await this.prisma.job.count({
+        where: {
+          userId,
+          status: 'ACTIVE',
+        },
+      });
+
+      return {
+        allJobs,
+        completed,
+        inProgress,
+        waitingForWorker,
+      };
+    } catch (error) {
+      return error;
+    }
+  }
+
   async getAvailableWorkerJobs(page: number, limit: number, userId: number) {
     const skip = (page - 1) * limit;
 
