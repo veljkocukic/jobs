@@ -19,7 +19,6 @@ export class JobOfferService {
       const jobOffer = await this.prisma.jobOffer.create({
         data: { ...jobOfferDto, jobId, userId },
       });
-
       const job = await this.prisma.job.findFirst({
         where: {
           id: jobId,
@@ -62,8 +61,9 @@ export class JobOfferService {
         },
       });
 
-      const ratings =
-        user.ratings.reduce((a, b) => a + b.rating, 0) / user.ratings.length;
+      const ratings = (
+        user.ratings.reduce((a, b) => a + b.rating, 0) / user.ratings.length
+      ).toFixed(2);
       const jobsDone = user.jobsDone.length;
 
       return { ...jobOffer, user: { ...user, ratings, jobsDone } };
