@@ -50,10 +50,9 @@ export class JobService {
           ...o,
           user: {
             ...o.user,
-            ratings: (
+            ratings:
               o.user.ratings.reduce((a, b) => a + b.rating, 0) /
-              o.user.ratings.length
-            ).toFixed(2),
+              o.user.ratings.length,
           },
         })),
       },

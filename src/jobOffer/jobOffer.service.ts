@@ -61,9 +61,8 @@ export class JobOfferService {
         },
       });
 
-      const ratings = (
-        user.ratings.reduce((a, b) => a + b.rating, 0) / user.ratings.length
-      ).toFixed(2);
+      const ratings =
+        user.ratings.reduce((a, b) => a + b.rating, 0) / user.ratings.length;
       const jobsDone = user.jobsDone.length;
 
       return { ...jobOffer, user: { ...user, ratings, jobsDone } };
