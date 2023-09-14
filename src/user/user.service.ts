@@ -17,11 +17,15 @@ export class UserService {
     return user;
   }
 
-  async getUserRatings(page: number, limit: number, userId: number) {
+  async getUserRatings(
+    page: number,
+    limit: number,
+    userId: number,
+    clientUserId?: number,
+  ) {
     const skip = (page - 1) * limit;
-
     const ratings = await this.prisma.rating.findMany({
-      where: { userRatedId: userId },
+      where: { userRatedId: clientUserId ?? userId },
       skip,
       take: limit,
       select: {
@@ -32,7 +36,7 @@ export class UserService {
     });
 
     const count = await this.prisma.rating.count({
-      where: { userRatedId: userId },
+      where: { userRatedId: clientUserId ?? userId },
     });
     const pageCount = count / limit;
     return { data: ratings, count, pageCount };

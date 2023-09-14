@@ -22,6 +22,16 @@ import { ApiTags } from '@nestjs/swagger';
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @Get('ratings/:id')
+  getUserRatings(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+    @Param('id', ParseIntPipe) clientUserId: number,
+    @GetUser('id', ParseIntPipe) userId: number,
+  ) {
+    return this.userService.getUserRatings(page, limit, userId, clientUserId);
+  }
+
   @Get('me')
   getMe(@GetUser() user: User) {
     return user;
@@ -51,14 +61,5 @@ export class UserController {
   @Delete(':id')
   deleteUser(@Param('id', ParseIntPipe) userId: number) {
     return this.userService.deleteUser(userId);
-  }
-
-  @Get('ratings/:id')
-  getUserRatings(
-    @Query('page', ParseIntPipe) page = 1,
-    @Query('limit', ParseIntPipe) limit = 10,
-    @GetUser('id', ParseIntPipe) userId: number,
-  ) {
-    return this.userService.getUserRatings(page, limit, userId);
   }
 }
