@@ -79,6 +79,7 @@ export class JobService {
         date: true,
         category: true,
         id: true,
+        jobOffers: true,
       },
     });
 
@@ -88,7 +89,11 @@ export class JobService {
       },
     });
     const pageCount = count / limit;
-    return { data: jobs, count, pageCount };
+    return {
+      data: jobs.map((j) => ({ ...j, jobOffers: j.jobOffers.length })),
+      count,
+      pageCount,
+    };
   }
 
   async deleteJob(jobId: number) {
