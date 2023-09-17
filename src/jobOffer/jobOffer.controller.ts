@@ -12,11 +12,12 @@ import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { JobOfferService } from './jobOffer.service';
 import { CreateJobOfferDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Job Offer')
 @UseGuards(JwtGuard)
 @Controller('job-offer')
+@ApiBearerAuth()
 export class JobOfferController {
   constructor(private jobOfferService: JobOfferService) {}
 

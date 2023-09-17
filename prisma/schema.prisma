@@ -30,6 +30,8 @@ model User{
   ratings Rating[]
   ratingGiven Rating[] @relation("ratings_given")
 
+  conversations Conversation[]
+
 
   currentlyWorkingOn Job? @relation(fields: [currentlyWorkingOnJobId], references: [id]) 
   currentlyWorkingOnJobId Int? @unique
@@ -72,7 +74,6 @@ model Job {
   acceptedOfferId Int?
 
   
-
   @@map("jobs")
 }
 
@@ -106,7 +107,33 @@ model Rating{
   ratingGiverUser User @relation(fields: [ratingGiverId], references: [id], name: "ratings_given")
 
   createdAt DateTime @default(now())
+}
 
+
+model Conversation{
+  id Int @id @default(autoincrement())
+  participants User[]
+  messages Message[]
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+
+  @@map("conversations")
+
+}
+
+model Message{
+    id Int @id @default(autoincrement())
+    conversationId Int
+    conversation Conversation @relation(fields: [conversationId],references: [id])
+    senderId Int
+    receiverId Int
+    content String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+
+  @@map("messages")
 
 }
 

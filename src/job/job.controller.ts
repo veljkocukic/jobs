@@ -14,11 +14,12 @@ import { JwtGuard } from 'src/auth/guard';
 import { CompleteAndRateDTO } from './dto/completeAndRate.dto';
 import { CreateJobDto } from './dto/createJob.dto';
 import { JobService } from './job.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Job')
 @UseGuards(JwtGuard)
 @Controller('jobs')
+@ApiBearerAuth()
 export class JobController {
   constructor(private jobService: JobService) {}
 

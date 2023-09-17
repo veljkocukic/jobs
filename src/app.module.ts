@@ -7,6 +7,7 @@ import { JobModule } from './job/job.module';
 import { JobOfferModule } from './jobOffer/jobOffer.module';
 import { GatewayModule } from './gateway/gateway.module';
 import { SocketModule } from './socket/socket.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { SocketModule } from './socket/socket.module';
     JobOfferModule,
     GatewayModule,
     SocketModule,
+    MessagesModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [],

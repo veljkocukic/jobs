@@ -14,6 +14,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Clavus Backend')
     .setVersion('v1')
+    .addBearerAuth()
     .build();
 
   const options: SwaggerDocumentOptions = {
