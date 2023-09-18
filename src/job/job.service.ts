@@ -1,23 +1,20 @@
 import { Injectable } from '@nestjs/common';
+import { EventsGateway } from 'src/events/events.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { checkIfExistsAndReturn } from 'src/utils/helpers';
 import { ITableJob } from 'src/utils/interfaces';
 import { CompleteAndRateDTO } from './dto/completeAndRate.dto';
 import { CreateJobDto } from './dto/createJob.dto';
-import { SocketService } from 'src/socket/socket.service';
 
 @Injectable()
 export class JobService {
-  constructor(
-    private readonly gw: SocketService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService, private gw: EventsGateway) {}
   async createJob(userId: number, jobDto: CreateJobDto) {
     const job = await this.prisma.job.create({
       data: { ...jobDto, userId, date: new Date(jobDto.date).toISOString() },
     });
 
-    this.gw.socket.emit('job', {
+    this.gw.server.emit('job', {
       category: job.category,
       id: job.id,
       type: 'job-created',
@@ -145,6 +142,8 @@ export class JobService {
           currentlyWorkingOnJobId: null,
         },
       });
+
+      this.gw.server.emit('job', '432');
     } catch (error) {
       return error;
     }

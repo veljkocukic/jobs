@@ -1,15 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { Conversation, User } from '@prisma/client';
+import { EventsGateway } from 'src/events/events.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SocketService } from 'src/socket/socket.service';
 import { AddMessageDto } from './dto';
 
 @Injectable()
 export class MessagesService {
-  constructor(
-    private readonly gw: SocketService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService, private gw: EventsGateway) {}
+
+  async getConversations(userId: number) {
+    try {
+      const conversations = await this.prisma.conversation.findMany({
+        where: {
+          participants: {
+            some: {
+              id: userId,
+            },
+          },
+        },
+        select: {
+          id: true,
+          participants: {
+            select: {
+              name: true,
+              lastName: true,
+              id: true,
+            },
+            where: {
+              id: {
+                not: { equals: userId },
+              },
+            },
+          },
+        },
+      });
+      return conversations;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 
   async getMessages(conversationId: number, page = 1, limit = 10) {
     try {
@@ -21,7 +50,7 @@ export class MessagesService {
         select: {
           messages: {
             orderBy: {
-              createdAt: 'desc',
+              createdAt: 'asc',
             },
             take: limit,
             skip,
@@ -74,6 +103,8 @@ export class MessagesService {
           conversationId: conversation.id,
         },
       });
+
+      this.gw.sendNewMessage(newMessage);
 
       return newMessage;
     } catch (error) {
