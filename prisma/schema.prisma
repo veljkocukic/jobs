@@ -32,9 +32,7 @@ model User{
 
   conversations Conversation[]
 
-
-  currentlyWorkingOn Job? @relation(fields: [currentlyWorkingOnJobId], references: [id]) 
-  currentlyWorkingOnJobId Int? @unique
+  currentlyWorkingOn Job[] @relation("working_on")
 
   @@map("users")
 
@@ -66,7 +64,8 @@ model Job {
   userThatDidTheJobId Int?
   userThatDidTheJob User? @relation(fields: [userThatDidTheJobId], references: [id], name: "job_done")
 
-  currentlyWorkingOnUser User?
+  currentlyWorkingOnUserId Int?
+  currentlyWorkingOnUser User? @relation(fields: [currentlyWorkingOnUserId], references: [id], name: "working_on")
 
   jobOffers JobOffer[]
 

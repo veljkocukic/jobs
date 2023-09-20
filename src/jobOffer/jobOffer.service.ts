@@ -89,6 +89,7 @@ export class JobOfferService {
           ...job,
           hasAcceptedOffer: true,
           acceptedOfferId: jobOffer.id,
+          currentlyWorkingOnUserId: jobOffer.userId,
           status: 'IN_PROGRESS',
         },
       });
@@ -105,7 +106,11 @@ export class JobOfferService {
       await this.prisma.user.update({
         where: { id: jobOffer.userId },
         data: {
-          currentlyWorkingOnJobId: jobOffer.jobId,
+          currentlyWorkingOn: {
+            connect: {
+              id: jobOffer.jobId,
+            },
+          },
         },
       });
 

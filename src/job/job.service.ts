@@ -139,11 +139,13 @@ export class JobService {
           id: job.currentlyWorkingOnUser.id,
         },
         data: {
-          currentlyWorkingOnJobId: null,
+          currentlyWorkingOn: {
+            disconnect: {
+              id: jobId,
+            },
+          },
         },
       });
-
-      this.gw.server.emit('job', '432');
     } catch (error) {
       return error;
     }
