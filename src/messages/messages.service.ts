@@ -35,7 +35,35 @@ export class MessagesService {
         },
       });
 
-      return conversations;
+      const getConversationsWithJobOffers = () => {
+        const promises = conversations.map(async (c) => {
+          const jobOffers = await this.prisma.jobOffer.findMany({
+            where: {
+              userId: c.participants.find((p) => p.id !== userId)?.id,
+              job: {
+                userId,
+                hasAcceptedOffer: false,
+              },
+            },
+            select: {
+              id: true,
+              job: {
+                select: {
+                  name: true,
+                  category: true,
+                  id: true,
+                },
+              },
+            },
+          });
+          return { ...c, jobOffers };
+        });
+        return Promise.all(promises);
+      };
+
+      const respArray = await getConversationsWithJobOffers();
+
+      return respArray;
     } catch (error) {
       throw new Error(error);
     }
