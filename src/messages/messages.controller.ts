@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   ParseIntPipe,
   Post,
   Query,
@@ -32,6 +33,14 @@ export class MessagesController {
   @Get('conversations')
   getConversations(@GetUser('id', ParseIntPipe) userId: number) {
     return this.messagesService.getConversations(userId);
+  }
+
+  @Get('goto-conversation/:receiverId')
+  goToConversation(
+    @GetUser('id', ParseIntPipe) senderId: number,
+    @Param('receiverId', ParseIntPipe) receiverid: number,
+  ) {
+    return this.messagesService.goToConversation(senderId, receiverid);
   }
 
   @Post()

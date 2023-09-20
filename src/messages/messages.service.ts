@@ -34,6 +34,7 @@ export class MessagesService {
           },
         },
       });
+
       return conversations;
     } catch (error) {
       throw new Error(error);
@@ -58,6 +59,39 @@ export class MessagesService {
         },
       });
       return messages;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async goToConversation(senderId: number, receiverId: number) {
+    try {
+      let conversation: Conversation;
+      const found = await this.prisma.conversation.findFirst({
+        where: {
+          participants: {
+            every: {
+              id: {
+                in: [senderId, receiverId],
+              },
+            },
+          },
+        },
+      });
+
+      if (found) {
+        conversation = found;
+      } else {
+        conversation = await this.prisma.conversation.create({
+          data: {
+            participants: {
+              connect: [{ id: senderId }, { id: receiverId }],
+            },
+          },
+        });
+      }
+
+      return { conversationId: conversation.id };
     } catch (error) {
       throw new Error(error);
     }

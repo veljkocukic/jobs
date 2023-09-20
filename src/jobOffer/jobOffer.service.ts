@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Conversation } from '@prisma/client';
 import { EventsGateway } from 'src/events/events.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateJobOfferDto } from './dto/jobOffer.dto';
@@ -108,13 +109,30 @@ export class JobOfferService {
         },
       });
 
-      const conversation = await this.prisma.conversation.create({
-        data: {
+      let conversation: Conversation;
+      const found = await this.prisma.conversation.findFirst({
+        where: {
           participants: {
-            connect: [{ id: jobOffer.userId }, { id: userId }],
+            every: {
+              id: {
+                in: [jobOffer.userId, userId],
+              },
+            },
           },
         },
       });
+
+      if (found) {
+        conversation = found;
+      } else {
+        conversation = await this.prisma.conversation.create({
+          data: {
+            participants: {
+              connect: [{ id: jobOffer.userId }, { id: userId }],
+            },
+          },
+        });
+      }
 
       this.gw.server.emit('job', {
         id: job.id,
