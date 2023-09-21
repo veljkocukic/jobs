@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { JobType, Currency, PriceType } from '@prisma/client';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDateString,
@@ -8,7 +9,26 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
+
+class LocationDto {
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Description',
+    type: String,
+    minLength: 1,
+  })
+  label: string;
+
+  @ApiProperty({
+    description: 'place_id',
+    type: String,
+    minLength: 1,
+  })
+  @IsNotEmpty()
+  value: string;
+}
 
 export class CreateJobDto {
   @ApiProperty({
@@ -72,11 +92,14 @@ export class CreateJobDto {
   description: string;
 
   @ApiProperty({
-    type: String,
+    type: LocationDto,
   })
-  @IsNotEmpty()
-  @IsString()
-  location: string;
+  @ValidateNested()
+  @Type(() => LocationDto)
+  location: {
+    label: string;
+    value: string;
+  };
 
   @ApiProperty({
     type: Boolean,

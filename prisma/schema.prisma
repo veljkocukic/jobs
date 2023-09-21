@@ -54,7 +54,7 @@ model Job {
   priceType PriceType @default(WHOLE)
   currency Currency @default(RSD)
   amount Float?
-  location String
+  location Json
   status JobStatus @default(ACTIVE)
   withoutMonitoring Boolean @default(false)
 
