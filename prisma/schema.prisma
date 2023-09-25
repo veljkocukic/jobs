@@ -26,6 +26,7 @@ model User{
   jobs Job[] @relation(name: "creator")
   jobOffers JobOffer[]
   jobsDone Job[] @relation("job_done")
+  areaOfWork Json[] @default([])
 
   ratings Rating[]
   ratingGiven Rating[] @relation("ratings_given")

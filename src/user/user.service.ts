@@ -147,4 +147,36 @@ export class UserService {
       return error;
     }
   }
+
+  async getAreaOfWork(userId: number) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      return user.areaOfWork;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async updateAreaOfWork(
+    userId: number,
+    areaOfWork: { lat: number; lng: number }[],
+  ) {
+    try {
+      const user = await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          areaOfWork,
+        },
+      });
+      return user.areaOfWork;
+    } catch (error) {
+      return error;
+    }
+  }
 }

@@ -43,12 +43,24 @@ export class UserController {
     return this.userService.getSingleUser(userId);
   }
 
+  @Get('area/:id')
+  getAreaOfWork(@Param('id', ParseIntPipe) userId: number) {
+    return this.userService.getSingleUser(userId);
+  }
+
   @Get()
   getAllUsers(
     @Query('page', ParseIntPipe) page = 1,
     @Query('limit', ParseIntPipe) limit = 10,
   ) {
     return this.userService.getAllUsers(page, limit);
+  }
+  @Patch('area')
+  updateAreaOfWork(
+    @GetUser('id', ParseIntPipe) userId: number,
+    @Body() areaOfWork: { lat: number; lng: number }[],
+  ) {
+    return this.userService.updateAreaOfWork(userId, areaOfWork);
   }
 
   @Patch(':id')
