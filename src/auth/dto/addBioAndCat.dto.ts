@@ -36,6 +36,7 @@ export class AddBioAndCatDto {
 
   @ApiProperty({
     type: CoordinatesDto,
+    isArray: true,
   })
   @ValidateNested()
   @Type(() => CoordinatesDto)
