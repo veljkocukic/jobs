@@ -199,46 +199,6 @@ export class JobService {
       },
     });
 
-    let query: any = `
-    SELECT
-      name,location,date,price,price_type,currency,category,amount,id 
-     FROM 
-      jobs 
-     WHERE 
-      status = 'ACTIVE'`;
-
-    const jobsQuery: any = {
-      skip,
-      take: limit,
-      select: {
-        name: true,
-        location: true,
-        date: true,
-        price: true,
-        price_type: true,
-        currency: true,
-        category: true,
-        amount: true,
-        id: true,
-      },
-      where: {
-        status: 'ACTIVE',
-      },
-    };
-    if (user.categories.length > 0) {
-      const userCategories = user.categories
-        .map((c) => "'" + c + "'")
-        .join(', ');
-      query += ' AND category IN (' + userCategories + ')';
-      jobsQuery.where = {
-        ...jobsQuery.where,
-        category: {
-          in: user.categories,
-        },
-      };
-    }
-    // const jobs = await this.prisma.job.findMany(jobsQuery);
-    // [21.249983, 43.624140], [21.209144, 43.569401], [21.275584, 43.575584]
     const categories =
       '(' + user.categories.map((c) => "'" + c + "'").join(', ') + ')';
     const coords = user.areaOfWork
@@ -249,6 +209,10 @@ export class JobService {
       name, location, date, price_type, price, currency, category, amount, id
     FROM
       jobs 
+    LIMIT 
+      ${limit}
+    OFFSET
+      ${skip}
     WHERE 
       status = 'ACTIVE' 
       AND CAST(category AS TEXT ) IN ${categories}
