@@ -63,7 +63,6 @@ export class JobService {
     userId: number,
   ): Promise<{ data: ITableJob[]; count: number; pageCount: number }> {
     const skip = (page - 1) * limit;
-
     const jobs = await this.prisma.job.findMany({
       skip,
       take: limit,
@@ -200,6 +199,14 @@ export class JobService {
       },
     });
 
+    let query: any = `
+    SELECT
+      name,location,date,price,price_type,currency,category,amount,id 
+     FROM 
+      jobs 
+     WHERE 
+      status = 'ACTIVE'`;
+
     const jobsQuery: any = {
       skip,
       take: limit,
@@ -208,7 +215,7 @@ export class JobService {
         location: true,
         date: true,
         price: true,
-        priceType: true,
+        price_type: true,
         currency: true,
         category: true,
         amount: true,
@@ -219,6 +226,10 @@ export class JobService {
       },
     };
     if (user.categories.length > 0) {
+      const userCategories = user.categories
+        .map((c) => "'" + c + "'")
+        .join(', ');
+      query += ' AND category IN (' + userCategories + ')';
       jobsQuery.where = {
         ...jobsQuery.where,
         category: {
@@ -226,9 +237,31 @@ export class JobService {
         },
       };
     }
-
-    const jobs = await this.prisma.job.findMany(jobsQuery);
-
+    // const jobs = await this.prisma.job.findMany(jobsQuery);
+    // [21.249983, 43.624140], [21.209144, 43.569401], [21.275584, 43.575584]
+    const categories =
+      '(' + user.categories.map((c) => "'" + c + "'").join(', ') + ')';
+    const coords = user.areaOfWork
+      .map((a: any) => `[${a.lat}, ${a.lng}]`)
+      .join(', ');
+    const jobs = await this.prisma.$queryRawUnsafe(`
+    SELECT
+      name, location, date, price_type, price, currency, category, amount, id
+    FROM
+      jobs 
+    WHERE 
+      status = 'ACTIVE' 
+      AND CAST(category AS TEXT ) IN ${categories}
+      AND ST_Intersects(
+        ST_SetSRID(ST_MakePoint((location->>'lat')::double precision, (location->>'lng')::double precision), 4326),
+        ST_SetSRID(ST_GeomFromGeoJSON('{
+            "type": "Polygon",
+            "coordinates": [
+                [ ${coords} ]
+            ]
+        }'), 4326)
+    )
+      `);
     const count = await this.prisma.job.count({
       where: {
         category: {

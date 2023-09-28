@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { JobType, Currency, PriceType } from '@prisma/client';
+import { JobType, Currency, price_type } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,
@@ -28,6 +28,22 @@ class LocationDto {
   })
   @IsNotEmpty()
   value: string;
+
+  @ApiProperty({
+    description: 'Latitude',
+    type: Number,
+    minLength: 1,
+  })
+  @IsNotEmpty()
+  lat: number;
+
+  @ApiProperty({
+    description: 'Longitude',
+    type: Number,
+    minLength: 1,
+  })
+  @IsNotEmpty()
+  lng: number;
 }
 
 export class CreateJobDto {
@@ -78,11 +94,11 @@ export class CreateJobDto {
 
   @ApiProperty({
     type: String,
-    enum: PriceType,
+    enum: price_type,
   })
   @IsNotEmpty()
-  @IsEnum(PriceType)
-  priceType: PriceType;
+  @IsEnum(price_type)
+  price_type: price_type;
 
   @ApiProperty({
     type: String,
@@ -99,6 +115,8 @@ export class CreateJobDto {
   location: {
     label: string;
     value: string;
+    lng: number;
+    lat: number;
   };
 
   @ApiProperty({

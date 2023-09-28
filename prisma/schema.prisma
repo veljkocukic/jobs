@@ -52,7 +52,7 @@ model Job {
   createdAt DateTime @default(now())
   date DateTime
   price Float 
-  priceType PriceType @default(WHOLE)
+  price_type price_type @default(WHOLE)
   currency Currency @default(RSD)
   amount Float?
   location Json
@@ -83,7 +83,7 @@ model JobOffer{
   description String
   price Float 
   expired Boolean @default(false)
-  priceType PriceType @default(WHOLE)
+  price_type price_type @default(WHOLE)
   currency Currency @default(RSD)
   amount Float?
 
@@ -151,7 +151,7 @@ enum JobStatus{
   ABORTED
 }
 
-enum PriceType{
+enum price_type{
   WHOLE
   PER_HOUR
   PER_M2

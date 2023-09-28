@@ -79,7 +79,7 @@ export class UserService {
             date: true,
             description: true,
             price: true,
-            priceType: true,
+            price_type: true,
           },
         },
         jobs: {

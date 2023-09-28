@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Currency, PriceType } from '@prisma/client';
+import { Currency, price_type } from '@prisma/client';
 import {
   IsEnum,
   IsNotEmpty,
@@ -27,12 +27,12 @@ export class CreateJobOfferDto {
 
   @ApiProperty({
     type: String,
-    enum: PriceType,
+    enum: price_type,
     example: 'PER_DAY',
   })
   @IsNotEmpty()
-  @IsEnum(PriceType)
-  priceType: PriceType;
+  @IsEnum(price_type)
+  price_type: price_type;
 
   @ApiProperty({
     type: String,
