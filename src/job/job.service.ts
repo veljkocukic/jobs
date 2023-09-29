@@ -209,10 +209,6 @@ export class JobService {
       name, location, date, price_type, price, currency, category, amount, id
     FROM
       jobs 
-    LIMIT 
-      ${limit}
-    OFFSET
-      ${skip}
     WHERE 
       status = 'ACTIVE' 
       AND CAST(category AS TEXT ) IN ${categories}
@@ -225,6 +221,10 @@ export class JobService {
             ]
         }'), 4326)
     )
+    LIMIT 
+      ${limit}
+    OFFSET
+      ${skip}
       `);
     const count = await this.prisma.job.count({
       where: {
