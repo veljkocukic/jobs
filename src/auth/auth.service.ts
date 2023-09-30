@@ -69,6 +69,7 @@ export class AuthService {
       data: {
         bio: dto.bio,
         categories: dto.categories,
+        areaOfWork: dto.areaOfWork as any,
       },
     });
     return user;
