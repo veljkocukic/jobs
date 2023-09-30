@@ -69,6 +69,54 @@ export class JobOfferService {
     }
   }
 
+  async getJobOffers(jobId: number, page: number, limit: number) {
+    try {
+      const skip = (page - 1) * limit;
+      const jobOffers = await this.prisma.jobOffer.findMany({
+        skip,
+        take: limit,
+        where: {
+          jobId,
+        },
+        select: {
+          id: true,
+          user: {
+            select: {
+              name: true,
+              lastName: true,
+              ratings: true,
+              jobsDone: true,
+            },
+          },
+          description: true,
+        },
+      });
+
+      const count = await this.prisma.jobOffer.count({
+        where: {
+          jobId,
+        },
+      });
+      const pageCount = count / limit;
+      return {
+        data: jobOffers.map((j) => ({
+          ...j,
+          user: {
+            ...j.user,
+            jobsDone: j.user.jobsDone.length,
+            ratings:
+              j.user.ratings.reduce((a, b) => a + b.rating, 0) /
+              j.user.ratings.length,
+          },
+        })),
+        count,
+        pageCount,
+      };
+    } catch (error) {
+      return error;
+    }
+  }
+
   async acceptJobOffer(jobOfferId: number, userId: number) {
     try {
       const jobOffer = await this.prisma.jobOffer.findUnique({

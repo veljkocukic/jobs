@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
@@ -22,8 +23,17 @@ export class JobOfferController {
   constructor(private jobOfferService: JobOfferService) {}
 
   @Get(':jobId')
-  getSingleJobOffer(@Param('jobId', ParseIntPipe) jobOfferId: number) {
-    return this.jobOfferService.getSingleJobOffer(jobOfferId);
+  getSingleJobOffer(@Param('jobId', ParseIntPipe) jobId: number) {
+    return this.jobOfferService.getSingleJobOffer(jobId);
+  }
+
+  @Get('all/:jobId')
+  getJobOffers(
+    @Param('jobId', ParseIntPipe) jobId: number,
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ) {
+    return this.jobOfferService.getJobOffers(jobId, page, limit);
   }
 
   @Post(':jobId')
