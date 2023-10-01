@@ -15,6 +15,7 @@ import { CompleteAndRateDTO } from './dto/completeAndRate.dto';
 import { CreateJobDto } from './dto/createJob.dto';
 import { JobService } from './job.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JobStatus } from '@prisma/client';
 
 @ApiTags('Job')
 @UseGuards(JwtGuard)
@@ -64,8 +65,9 @@ export class JobController {
     @Query('page', ParseIntPipe) page = 1,
     @Query('limit', ParseIntPipe) limit = 10,
     @GetUser('id', ParseIntPipe) userId: number,
+    @Query('status') status?: JobStatus,
   ) {
-    return this.jobService.getAllJobs(page, limit, userId);
+    return this.jobService.getAllJobs(page, limit, userId, status);
   }
 
   @Delete(':id')

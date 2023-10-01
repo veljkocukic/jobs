@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { JobStatus } from '@prisma/client';
 import { EventsGateway } from 'src/events/events.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { checkIfExistsAndReturn } from 'src/utils/helpers';
@@ -61,6 +62,7 @@ export class JobService {
     page: number,
     limit: number,
     userId: number,
+    status?: JobStatus,
   ): Promise<{ data: ITableJob[]; count: number; pageCount: number }> {
     const skip = (page - 1) * limit;
     const jobs = await this.prisma.job.findMany({
@@ -68,6 +70,7 @@ export class JobService {
       take: limit,
       where: {
         userId,
+        status,
       },
       select: {
         name: true,
@@ -210,7 +213,7 @@ export class JobService {
     FROM
       jobs 
     WHERE 
-      status = 'ACTIVE' 
+      status = 'ACTIVE'
       AND CAST(category AS TEXT ) IN ${categories}
       AND ST_Intersects(
         ST_SetSRID(ST_MakePoint((location->>'lat')::double precision, (location->>'lng')::double precision), 4326),

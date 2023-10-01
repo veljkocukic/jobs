@@ -79,7 +79,7 @@ export class MessagesService {
         select: {
           messages: {
             orderBy: {
-              createdAt: 'asc',
+              createdAt: 'desc',
             },
             take: limit,
             skip,
