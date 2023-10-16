@@ -158,14 +158,13 @@ enum price_type{
   PER_DAY
 }
 
-
-
-
 enum JobType {
   ELECTRICS
   PLUMBING
   PAINTING
   GARDENING
   CLEANING
+  APPLIANCES
+  CARPENTRY
 }
 

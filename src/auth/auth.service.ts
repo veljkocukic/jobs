@@ -35,11 +35,11 @@ export class AuthService {
       },
     });
 
-    if (!user) throw new ForbiddenException('Credentials incorrect');
+    if (!user) throw new ForbiddenException('Pogrešna mejl adresa.');
 
     const pwMatches = await argon.verify(user.password, dto.password);
 
-    if (!pwMatches) throw new ForbiddenException('Credentials incorrect');
+    if (!pwMatches) throw new ForbiddenException('Pogrešna lozinka');
     delete user.password;
     const token = await this.signToken(user.id, user.email);
     return { ...token, user };
