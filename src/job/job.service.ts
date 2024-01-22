@@ -36,7 +36,7 @@ export class JobService {
         price: true,
         id: true,
         user: {
-          select: { name: true, lastName: true, ratings: true },
+          select: { name: true, lastName: true, ratings: true, id: true },
         },
       },
     });
