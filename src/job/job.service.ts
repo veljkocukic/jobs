@@ -85,6 +85,7 @@ export class JobService {
     const count = await this.prisma.job.count({
       where: {
         userId,
+        status,
       },
     });
     const pageCount = count / limit;
